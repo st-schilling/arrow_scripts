@@ -24,7 +24,7 @@
 WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../.. && pwd )
 
 # The tag you want to merge in goes here
-BRANCH=android-7.1.1_r12
+BRANCH=android-7.1.2_r11
 
 # Google source url
 REPO=https://android.googlesource.com/platform/
@@ -36,7 +36,7 @@ upstream=()
 failed=()
 
 # This is the array of repos to blacklist and not merge
-blacklist=('manifest' 'prebuilt' 'packages/apps/DeskClock' 'prebuilts/build-tools')
+blacklist=('manifest' 'prebuilt' 'packages/apps/DeskClock' 'prebuilts/build-tools' 'packages/apps/MusicFX')
 
 # Colors
 COLOR_RED='\033[0;31m'
