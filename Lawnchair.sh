@@ -2,8 +2,8 @@
 
 url='https://labs.xda-developers.com/store/app/download/ch.deletescape.lawnchair'
 
-#CUR_DIR=`pwd`
-DOWN_PATH='Lawnchair/'
+CUR_DIR=`pwd`
+DOWN_PATH="$CUR_DIR/dot_scripts/Lawnchair"
 
 # Package manager check to install 'wget'
 declare -A osInfo;
