@@ -40,11 +40,17 @@ else
 	esac
 fi
 		
-CONNECTION_CHECK=`wget -q --tries=10 --timeout=20 --spider http://google.com`
+wget -q --tries=10 --timeout=20 --spider http://google.com
 
 if [[ $? -eq 0 ]]; then
-	echo "Grabbing the latest version of Lawnchair"
-	DOWN=`wget -q -O $DOWN_PATH/Lawnchair.apk $url`
+	if [[ -f $DOWN_PATH/Lawnchair.apk ]] ; then
+		if [[ $(find "$DOWN_PATH/Lawnchair.apk" -mtime +1 -print) ]]; then
+			echo "We already have the latest version of Lawnchair"
+	fi
+		else
+			echo "Grabbing the latest version of Lawnchair"
+			wget -q --show-progress -O $DOWN_PATH/Lawnchair.apk $url
+		fi
 else
 	echo "Looks like you aren't connected to the Internet"
 	if [[ -f $DOWN_PATH/Lawnchair.apk ]] ; then
