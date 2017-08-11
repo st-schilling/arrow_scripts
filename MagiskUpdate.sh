@@ -27,18 +27,33 @@ app_link=$(echo $magisk_json | jq --raw-output '.app.link')
 zip_version=$(echo $magisk_json | jq --raw-output '.magisk.version')
 zip_link=$(echo $magisk_json | jq --raw-output '.magisk.link')
 
+# Force download files on the first run
+if [[ -f $APP_DIR/MagiskManager.apk ]] && [[ -f $ZIP_DIR/Magisk.zip ]]; then
+	FORCE_CHECK=0
+else
+	FORCE_CHECK=1
+	check_app_version=1
+	app_version=0
+	check_zip_version=1
+	zip_version=0
+fi
+
 if [ $check_app_version == $app_version ] && [ $check_zip_version == $zip_version ]; then
 	echo "We already have the latest version Magisk"
 else
 	echo "Downloading Latest Magisk app"
+	if [[ $FORCE_CHECK == 0 ]]; then
 	mv $APP_DIR/MagiskManager.apk $APP_DIR/MagiskManager.apk.bak
-	wget --show-progress -O $APP_DIR/MagiskManager.apk $app_link 
+	fi
+	wget -q --show-progress -O $APP_DIR/MagiskManager.apk $app_link 
 	APP_DOWN_CHECK=$?
 
 	echo " "
 
 	echo "Downloading Latest Magisk zip"
+	if [[ $FORCE_CHECK == 0 ]]; then
 	mv $ZIP_DIR/Magisk.zip $ZIP_DIR/Magisk.zip.bak
+	fi
 	wget -q --show-progress -O $ZIP_DIR/Magisk.zip $zip_link
 	ZIP_DOWN_CHECK=$?
 
@@ -52,8 +67,12 @@ else
 		# If the download fails in the middle it leaves behind a corrupted
 		# package. SO let's rename back our backed up old version file to 
 		# be use instead.
-		echo "Download failed falling back to old version of Magisk"
-		mv $APP_DIR/MagiskManager.apk.bak $APP_DIR/MagiskManager.apk
-		mv $ZIP_DIR/Magisk.zip.bak $ZIP_DIR/Magisk.zip
+		if [[ $FORCE_CHECK == 1 ]]; then
+			echo "Unable to the download files. Magisk will not be available in this build."
+		else
+			echo "Download failed falling back to old version of Magisk"
+			mv $APP_DIR/MagiskManager.apk.bak $APP_DIR/MagiskManager.apk
+			mv $ZIP_DIR/Magisk.zip.bak $ZIP_DIR/Magisk.zip
+		fi
 	fi	
 fi
