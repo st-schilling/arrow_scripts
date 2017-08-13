@@ -18,14 +18,14 @@ else
 fi
 
 magisk_check=$(cat $SCRIPTS_DIR/magisk_check.json)
-check_app_version=$(echo $magisk_check | jq --raw-output '.app.version')
-check_zip_version=$(echo $magisk_check | jq --raw-output '.magisk.version')
+check_app_version=$(echo $magisk_check | python -c 'import sys, json; print json.load(sys.stdin)["app"]["version"]')
+check_zip_version=$(echo $magisk_check | python -c 'import sys, json; print json.load(sys.stdin)["magisk"]["version"]')
 
 magisk_json=$(curl -sk $orig_json)
-app_version=$(echo $magisk_json | jq --raw-output '.app.version')
-app_link=$(echo $magisk_json | jq --raw-output '.app.link')
-zip_version=$(echo $magisk_json | jq --raw-output '.magisk.version')
-zip_link=$(echo $magisk_json | jq --raw-output '.magisk.link')
+app_version=$(echo $magisk_json | python -c 'import sys, json; print json.load(sys.stdin)["app"]["version"]')
+app_link=$(echo $magisk_json | python -c 'import sys, json; print json.load(sys.stdin)["app"]["link"]')
+zip_version=$(echo $magisk_json | python -c 'import sys, json; print json.load(sys.stdin)["magisk"]["version"]')
+zip_link=$(echo $magisk_json | python -c 'import sys, json; print json.load(sys.stdin)["magisk"]["link"]')
 
 # Force download files on the first run
 if [[ -f $APP_DIR/MagiskManager.apk ]] && [[ -f $ZIP_DIR/Magisk.zip ]]; then
