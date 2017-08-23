@@ -98,6 +98,7 @@ orig_json='https://raw.githubusercontent.com/topjohnwu/MagiskManager/update/magi
 			# be use instead.
 			if [[ $FORCE_CHECK == 1 ]]; then
 				echo "Unable to the download files. Magisk will not be available in this build."
+				export WITH_MAGISK="false";
 			else
 				echo "Download failed falling back to old version of Magisk"
 				mv $APP_DIR/MagiskManager.apk.bak $APP_DIR/MagiskManager.apk
