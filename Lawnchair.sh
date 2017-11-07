@@ -1,6 +1,9 @@
 #!/bin/bash
 
-url='https://labs.xda-developers.com/store/app/download/ch.deletescape.lawnchair'
+#url='https://labs.xda-developers.com/store/app/download/ch.deletescape.lawnchair'
+gh_json=https://api.github.com/repos/Deletescape-Media/Lawnchair/releases/latest
+check_json=$(curl -sk $gh_json)
+down_url=$(echo $check_json | python -c 'import sys, json; print json.load(sys.stdin)["assets"][0]["browser_download_url"]')
 
 CUR_DIR=`pwd`
 DOWN_PATH="$CUR_DIR/dot_scripts/Lawnchair"
@@ -49,7 +52,7 @@ if [[ $? -eq 0 ]]; then
 	fi
 		else
 			echo "Grabbing the latest version of Lawnchair"
-			wget -q --show-progress -O $DOWN_PATH/Lawnchair.apk $url
+			wget -q -O $DOWN_PATH/Lawnchair.apk $down_url
 		fi
 else
 	echo "Looks like you aren't connected to the Internet"
