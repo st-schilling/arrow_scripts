@@ -2,8 +2,7 @@
 
 #url='https://labs.xda-developers.com/store/app/download/ch.deletescape.lawnchair'
 gh_json=https://api.github.com/repos/Deletescape-Media/Lawnchair/releases/latest
-check_json=$(curl -sk $gh_json)
-down_url=$(echo $check_json | python -c 'import sys, json; print json.load(sys.stdin)["assets"][0]["browser_download_url"]')
+down_url=$(echo $gh_json | python -c 'import sys, urllib, json; url=(sys.stdin.readline()); response=urllib.urlopen(url); data=json.loads(response.read()); print data["assets"][0]["browser_download_url"]')
 
 CUR_DIR=`pwd`
 DOWN_PATH="$CUR_DIR/dot_scripts/Lawnchair"
@@ -46,7 +45,7 @@ fi
 wget -q --tries=10 --timeout=20 --spider http://google.com
 
 if [[ $? -eq 0 ]]; then
-	if [[ -f $DOWN_PATH/Lawnchair.apk ]] ; then
+	if [[ -f $DOWN_PATH/Lawnchair.apk ]]; then
 		if [[ $(find "$DOWN_PATH/Lawnchair.apk" -mtime +1 -print) ]]; then
 			echo "We already have the latest version of Lawnchair"
 	fi
@@ -56,7 +55,7 @@ if [[ $? -eq 0 ]]; then
 		fi
 else
 	echo "Looks like you aren't connected to the Internet"
-	if [[ -f $DOWN_PATH/Lawnchair.apk ]] ; then
+	if [[ -f $DOWN_PATH/Lawnchair.apk ]]; then
 		echo "An old version of Lawnchair exists, using it for now."
 	else
 		echo "Nothing found! Lawncahir won't be available in this build!"
