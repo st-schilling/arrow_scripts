@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Copyright (C) 2016 DirtyUnicorns
 # Copyright (C) 2016 Jacob McSwain
+# Copyright (C) 2018 ArrowOS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The source directory; this is automatically two folder up because the script
-# is located in vendor/scripts. Other ROMs will need to change this. The logic is
-# as follows:
-# 1. Get the absolute path of the script with readlink in case there is a symlink
-#    This script may be symlinked by a manifest so we need to account for that
-# 2. Get the folder containing the script with dirname
-# 3. Move into the folder that is two folder above that one and print it
-WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../.. && pwd )
+WORKING_DIR=`pwd`
 
 # The tag you want to merge in goes here
-BRANCH=android-${1}
+BRANCH=android-"$version"_${1}
 
 # Google source url
 REPO=https://android.googlesource.com/platform/
@@ -53,11 +47,19 @@ function is_in_blacklist() {
 }
 
 function warn_user() {
-  echo "Using this script may cause you to lose unsaved work"
+  echo "Make sure that you have added your ssh keys on gerrit before proceeding!"
   read -r -p "Do you want to continue? [y/N] " response
   if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    echo "You've been warned"
+    if [[ -f /tmp/gu.tmp ]]; then
+      username=`cat /tmp/gu.tmp`
+      echo "found username: $username"
+    else
+      echo "Please enter your gerrit username"
+      read username
+      echo $username > /tmp/gu.tmp
+    fi
   else
+    echo "PUSH ABORTED!"
     exit 1
   fi
 }
@@ -69,8 +71,8 @@ function get_repos() {
   for i in ${repos[@]}
   do
     if grep -q "$i" /tmp/rebase.tmp; then # If Google has it and
-      if grep -q "$i" $WORKING_DIR/manifest/n7x_default.xml; then # If we have it in our manifest and
-        if grep "$i" $WORKING_DIR/manifest/n7x_default.xml | grep -q "remote="; then # If we track our own copy of it
+      if grep -q "$i" $WORKING_DIR/manifest/arrow.xml; then # If we have it in our manifest and
+        if grep "$i" $WORKING_DIR/manifest/arrow.xml | grep -q "remote=arrow"; then # If we track our own copy of it
           if ! is_in_blacklist $i; then # If it's not in our blacklist
             upstream+=("$i") # Then we need to update it
           else
@@ -113,12 +115,12 @@ function merge() {
 function print_result() {
   if [ ${#failed[@]} -eq 0 ]; then
     echo ""
-    echo "========== "$BRANCH" is merged sucessfully =========="
-    echo "========= Compile and test before pushing to github ========="
+    echo "========== "$BRANCH" is merged/pushed sucessfully =========="
+    echo "========= Compile and test before pushing  ========="
     echo ""
   else
     echo -e $COLOR_RED
-    echo -e "These repos have merge errors: \n"
+    echo -e "These repos have merge/push errors: \n"
     for i in ${failed[@]}
     do
       echo -e "$i"
@@ -127,29 +129,56 @@ function print_result() {
   fi
 }
 
-# Start working
-cd $WORKING_DIR
+function push() {
+  cd $WORKING_DIR/$1
+  project_name=`git remote -v | head -n1 | awk '{print $2}' | sed 's/.*\///' | sed 's/\.git//'`
+  git remote add gerrit ssh://$username@review.arrowos.net:29418/ArrowOS/$project_name
+  git push gerrit HEAD:refs/for/arrow-8.x%topic=tag
+  if [ $? -ne 0 ]; then # If merge failed
+    failed+=($1) # Add to the list
+  fi
+}
 
-# Warn user that this may destroy unsaved work
-# warn_user
+function gerrit_push() {
+  echo "IT IS RECOMMENDED THAT YOU HAVE AN ACCOUNT ON OUR GERRIT AND ADDED YOUR SSH KEYS!!"
+  warn_user
+  get_repos
+  for i in ${upstream[@]}
+  do
+    echo $i
+    push $i
+  done
+  print_result
+}
 
-# Get the upstream repos we track
-get_repos
+if [[ ${1} == push ]]; then
+  gerrit_push
+else
 
-echo "================================================"
-echo "          Force Syncing all your repos          "
-echo "         and deleting all upstream repos        "
-echo " This is done so we make sure you're up to date "
-echo "================================================"
+  # Start working
+  cd $WORKING_DIR
 
-delete_upstream
-force_sync
+  # Warn user that this may destroy unsaved work
+  # warn_user
 
-# Merge every repo in upstream
-for i in ${upstream[@]}
-do
-  merge $i
-done
+  # Get the upstream repos we track
+  get_repos
 
-# Print any repos that failed, so we can fix merge issues
-print_result
+  echo "================================================"
+  echo "          Force Syncing all your repos          "
+  echo "         and deleting all upstream repos        "
+  echo " This is done so we make sure you're up to date "
+  echo "================================================"
+
+  delete_upstream
+  force_sync
+
+  # Merge every repo in upstream
+  for i in ${upstream[@]}
+  do
+    merge $i
+  done
+
+  # Print any repos that failed, so we can fix merge issues
+  print_result
+fi 
