@@ -15,7 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-WORKING_DIR=`pwd`
+WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../ && pwd )
+echo $WORKING_DIR
 
 # The tag you want to merge in goes here
 BRANCH=android-"$version"_${1}
@@ -72,7 +73,7 @@ function get_repos() {
   do
     if grep -q "$i" /tmp/rebase.tmp; then # If Google has it and
       if grep -q "$i" $WORKING_DIR/manifest/arrow.xml; then # If we have it in our manifest and
-        if grep "$i" $WORKING_DIR/manifest/arrow.xml | grep -q "remote=arrow"; then # If we track our own copy of it
+        if grep "$i" $WORKING_DIR/manifest/arrow.xml | grep -q 'remote="arrow"'; then # If we track our own copy of it
           if ! is_in_blacklist $i; then # If it's not in our blacklist
             upstream+=("$i") # Then we need to update it
           else
@@ -133,7 +134,7 @@ function push() {
   cd $WORKING_DIR/$1
   project_name=`git remote -v | head -n1 | awk '{print $2}' | sed 's/.*\///' | sed 's/\.git//'`
   git remote add gerrit ssh://$username@review.arrowos.net:29418/ArrowOS/$project_name
-  git push gerrit HEAD:refs/for/arrow-8.x%topic=tag
+  git push gerrit HEAD:refs/for/arrow-9.x%topic=tag
   if [ $? -ne 0 ]; then # If merge failed
     failed+=($1) # Add to the list
   fi
