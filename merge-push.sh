@@ -96,7 +96,7 @@ function delete_upstream() {
 function force_sync() {
   echo "Repo Syncing........."
   sleep 10
-  repo sync -c --force-sync >> /dev/null
+  repo sync -c --force-sync --no-tags --no-clone-bundle
   if [ $? -eq 0 ]; then
     echo "Repo Sync success"
   else
@@ -107,7 +107,7 @@ function force_sync() {
 
 function merge() {
   cd $WORKING_DIR/$1
-  git pull $REPO/$1.git -t $BRANCH
+  git pull $REPO/$1 $BRANCH
   if [ $? -ne 0 ]; then # If merge failed
     failed+=($1) # Add to the list
   fi
