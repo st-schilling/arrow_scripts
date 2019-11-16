@@ -19,7 +19,7 @@ WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../ && pwd )
 echo $WORKING_DIR
 
 # The tag you want to merge in goes here
-BRANCH=android-"$version"_${1}
+BRANCH="android-10.0.0_r11"
 
 # Google source url
 REPO=https://android.googlesource.com/platform/
@@ -30,8 +30,18 @@ upstream=()
 # This is the array of repos with merge errors
 failed=()
 
+# This is the array of repos with merge fine
+success=()
+
+# This is the array of repos push failed
+pushedF=()
+
+# This is the array of repos pushed fine
+pushedP=()
+
 # This is the array of repos to blacklist and not merge
-blacklist=('manifest' 'prebuilt' 'packages/apps/DeskClock' 'prebuilts/build-tools' 'packages/apps/MusicFX')
+blacklist=('cts'prebuilt' 'packages/apps/DeskClock' 'prebuilts/build-tools' 'packages/apps/MusicFX' 'packages/apps/ExactCalculator'
+           'packages/apps/FMRadio' 'packages/apps/Updater' 'hardware/qcom/power' 'prebuilts/r8' 'prebuilts/tools')
 
 # Colors
 COLOR_RED='\033[0;31m'
@@ -110,6 +120,9 @@ function merge() {
   git pull $REPO/$1 $BRANCH
   if [ $? -ne 0 ]; then # If merge failed
     failed+=($1) # Add to the list
+  else
+    success+=($1)
+    push $1
   fi
 }
 
@@ -121,22 +134,48 @@ function print_result() {
     echo ""
   else
     echo -e $COLOR_RED
-    echo -e "These repos have merge/push errors: \n"
+    echo -e "These repos have merge errors: \n"
     for i in ${failed[@]}
     do
       echo -e "$i"
     done
     echo -e $COLOR_BLANK
   fi
+
+  echo ""
+  echo "======== "$BRANCH" has been merged successfully to these repos ========"
+  echo ""
+  for i in ${success[@]}
+  do
+    echo -e "$i"
+  done
+
+  echo ""
+  echo "======== "$BRANCH" has been pushed successfully to these repos ========"
+  echo ""
+  for i in ${pushedP[@]}
+  do
+    echo -e "$i"
+  done
+
+  echo ""
+  echo "======== "$BRANCH" push has failed to these repos ========"
+  echo ""
+  for i in ${pushedF[@]}
+  do
+    echo -e "$i"
+  done
 }
 
 function push() {
   cd $WORKING_DIR/$1
   project_name=`git remote -v | head -n1 | awk '{print $2}' | sed 's/.*\///' | sed 's/\.git//'`
   git remote add gerrit ssh://$username@review.arrowos.net:29418/ArrowOS/$project_name
-  git push gerrit HEAD:refs/for/arrow-9.x%topic=tag
+  git push gerrit HEAD:refs/heads/arrow-10.0
   if [ $? -ne 0 ]; then # If merge failed
-    failed+=($1) # Add to the list
+    pushedF+=($1) # Add to the list
+  else
+    pushedP+=($1)
   fi
 }
 
