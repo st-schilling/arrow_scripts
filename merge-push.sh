@@ -19,7 +19,7 @@ WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../ && pwd )
 echo $WORKING_DIR
 
 # The tag you want to merge in goes here
-BRANCH="android-10.0.0_r11"
+BRANCH="android-10.0.0_r23"
 
 # Google source url
 REPO=https://android.googlesource.com/platform/
@@ -40,8 +40,8 @@ pushedF=()
 pushedP=()
 
 # This is the array of repos to blacklist and not merge
-blacklist=('cts'prebuilt' 'packages/apps/DeskClock' 'prebuilts/build-tools' 'packages/apps/MusicFX' 'packages/apps/ExactCalculator'
-           'packages/apps/FMRadio' 'packages/apps/Updater' 'hardware/qcom/power' 'prebuilts/r8' 'prebuilts/tools')
+blacklist=('cts' 'prebuilt' 'packages/apps/DeskClock' 'prebuilts/build-tools' 'packages/apps/MusicFX' 'packages/apps/ExactCalculator'
+           'packages/apps/FMRadio' 'packages/apps/Gallery2' 'packages/apps/Updater' 'hardware/qcom/power' 'prebuilts/r8' 'prebuilts/tools')
 
 # Colors
 COLOR_RED='\033[0;31m'
@@ -170,7 +170,7 @@ function print_result() {
 function push() {
   cd $WORKING_DIR/$1
   project_name=`git remote -v | head -n1 | awk '{print $2}' | sed 's/.*\///' | sed 's/\.git//'`
-  git remote add gerrit ssh://$username@review.arrowos.net:29418/ArrowOS/$project_name
+  git remote add gerrit ssh://ganeshi4u@review.arrowos.net:29418/ArrowOS/$project_name
   git push gerrit HEAD:refs/heads/arrow-10.0
   if [ $? -ne 0 ]; then # If merge failed
     pushedF+=($1) # Add to the list
@@ -186,7 +186,7 @@ function gerrit_push() {
   for i in ${upstream[@]}
   do
     echo $i
-    push $i
+    #push $i
   done
   print_result
 }
