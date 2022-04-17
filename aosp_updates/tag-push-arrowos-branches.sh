@@ -19,7 +19,6 @@
 . ./shared-definitions.sh
 
 # This is the array of repos to which are tagged manually
-#manuallyTaggedRepos=('frameworks/av')
 manuallyTaggedRepos=()
 
 # This is for restricting operation to just the named repos - allowing quicker operation upon testing/error
