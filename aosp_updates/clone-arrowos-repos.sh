@@ -29,9 +29,9 @@ acceptedRepos=()
 function clone() {
   mkdir -p $WORKING_DIR/$1
   cd $WORKING_DIR/$1
-  
-  echo "git clone -b $LOCAL_BRANCH --single-branch $ARROWOS_REPO/$2.git $WORKING_DIR/$1"
-  git clone -b $LOCAL_BRANCH --single-branch $ARROWOS_REPO/$2.git $WORKING_DIR/$1
+
+  echo "git clone -b $ANDROID11_BRANCH --single-branch $ARROWOS_REPO/$2.git $WORKING_DIR/$1"
+  git clone -b $ANDROID11_BRANCH --single-branch $ARROWOS_REPO/$2.git $WORKING_DIR/$1
   
   if [ $? -ne 0 ]; then # If merge failed
     failed+=($1) # Add to the list
