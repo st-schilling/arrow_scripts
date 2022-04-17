@@ -76,7 +76,8 @@ pushedP=()
 # This is the array of repos to blacklist and not merge
 blacklist=('cts' 'prebuilt' 'external/chromium-webview' 'prebuilts/build-tools' 'packages/apps/MusicFX' 'packages/apps/FMRadio'
            'packages/apps/Gallery2' 'packages/apps/Updater' 'hardware/qcom/power' 'prebuilts/r8' 'prebuilts/tools' 'tools/metalava'
-           'prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9' 'prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8')
+           'prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9' 'prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8'
+           'packages/apps/WallpaperPicker' 'pdk')
 
 # This is the array of repos to which are tagged manually
 #manuallyTaggedRepos=('frameworks/av')
