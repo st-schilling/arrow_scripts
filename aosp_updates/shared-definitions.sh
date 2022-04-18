@@ -229,11 +229,11 @@ function resetBaseBranch() {
 function print_result() {
   if [ ${#failed[@]} -eq 0 ]; then
     echo ""
-    echo "========== "$FEATURE_BRANCH" is tagged sucessfully =========="
+    echo "========== "$FEATURE_BRANCH" is $1 sucessfully =========="
     echo ""
   else
     echo -e $COLOR_RED
-    echo -e "These repos have tag errors: \n"
+    echo -e "========== These repos have $1 errors: ==========\n"
     for i in ${failed[@]}
     do
       echo -e "$i"
@@ -242,7 +242,7 @@ function print_result() {
   fi
 
   echo ""
-  echo "======== "$FEATURE_BRANCH" has been tagged successfully ========"
+  echo "======== "$FEATURE_BRANCH" has been $1 successfully ========"
   echo ""
   for i in ${success[@]}
   do
@@ -250,7 +250,7 @@ function print_result() {
   done
 
   echo ""
-  echo "======== tag "$ANDROID_BRANCH" has been pushed successfully to these repos ========"
+  echo "======== tag "$ANDROID_BRANCH" has been $2 successfully to these repos ========"
   echo ""
   for i in ${pushedP[@]}
   do
@@ -258,7 +258,7 @@ function print_result() {
   done
 
   echo ""
-  echo "======== tag "$ANDROID_BRANCH" push has failed to these repos ========"
+  echo "======== tag "$ANDROID_BRANCH" $2 has failed to these repos ========"
   echo ""
   for i in ${pushedF[@]}
   do

@@ -94,4 +94,4 @@ if [ ${#failed[@]} -eq 0 ]; then
 fi
 
 # Print any repos that failed, so we can fix merge issues
-print_result
+print_result "tagged" "pushed"

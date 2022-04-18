@@ -64,4 +64,4 @@ do
 done
 
 # Print any repos that failed, so we can fix merge issues
-print_result
+print_result "merged" "IGNORED"
