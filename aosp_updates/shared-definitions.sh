@@ -79,6 +79,8 @@ blacklist=('cts' 'prebuilt' 'external/chromium-webview' 'prebuilts/build-tools' 
            'prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9' 'prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8'
            'packages/apps/WallpaperPicker' 'pdk')
 
+ARROWOS_neededAtAnyTime=('build/make')
+
 # This is the array of repos to which are tagged manually
 manuallyTaggedRepos=()
 
@@ -101,6 +103,16 @@ function is_in_blacklist() {
 
 function is_manually_tagged() {
   for j in ${manuallyTaggedRepos[@]}
+  do
+    if [ "$j" == "$1" ]; then
+      return 0;
+    fi
+  done
+  return 1;
+}
+
+function is_in_neededAtAnyTime() {
+  for j in ${ARROWOS_neededAtAnyTime[@]}
   do
     if [ "$j" == "$1" ]; then
       return 0;
@@ -156,7 +168,13 @@ for (( c=0; c<${arraylength}; c++ ));
   do
     i=${repoPaths[$c]}
     arrowsRepoName=${repoNames[$c]}
-    if grep -q "$i" /tmp/rebase.tmp; then # If Google has it and
+
+    $(grep -q "$i" /tmp/rebase.tmp);
+    googleHasIt=$?
+    $(is_in_neededAtAnyTime "$i");
+    neededAtAnyTime=$?
+
+     if [[ googleHasIt -eq "0" || neededAtAnyTime -eq "0" ]]; then
       if grep -q "$i" $ARROWOS_REPO_MANIFEST; then # If we have it in our manifest and
         if grep "$i" $ARROWOS_REPO_MANIFEST | grep -q 'remote="arrow"'; then # If we track our own copy of it
           if ! is_in_blacklist $i; then # If it's not in our blacklist
