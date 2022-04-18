@@ -113,16 +113,16 @@ function is_in_accepted_repos() {
   
   if [[ ${#acceptedRepos[@]} -eq 0 ]]; then
     echo "acceptedRepos unset - accepting all"
-    return 1;
+    return 0;
   fi
   
   for j in ${acceptedRepos[@]}
   do
     if [ "$j" == "$1" ]; then
-      return 1;
+      return 0;
     fi
   done
-  return 0;
+  return 1;
 }
 
 function warn_user() {
@@ -161,7 +161,7 @@ for (( c=0; c<${arraylength}; c++ ));
         if grep "$i" $ARROWOS_REPO_MANIFEST | grep -q 'remote="arrow"'; then # If we track our own copy of it
           if ! is_in_blacklist $i; then # If it's not in our blacklist
             if ! is_manually_tagged $i; then # If it's not in our blacklist
-                if ! is_in_accepted_repos $i; then # If it's not in our blacklist
+                if is_in_accepted_repos $i; then # If it's not in our blacklist
                     echo "adding $i to repos"
                     upstream+=("$i") # Then we need to update it
                     arrowsRepos+=("$arrowsRepoName") # Then we need to update it
