@@ -59,7 +59,6 @@ echo "================================================"
 
 
 # Merge every repo in upstream
-#for i in ${upstream[@]}
 arraylength=${#upstream[@]}
 for (( i=0; i<${arraylength}; i++ ));
 do
