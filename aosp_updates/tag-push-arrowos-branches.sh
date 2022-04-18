@@ -28,6 +28,7 @@ manuallyTaggedRepos=()
 acceptedRepos=()
 
 function tagBranch() {
+  echo "cd $WORKING_DIR/$1"
   cd $WORKING_DIR/$1
   
   commitMessage="Merge tag '$ANDROID_BRANCH' of $ARROWOS_REPO/$2 into HEAD
