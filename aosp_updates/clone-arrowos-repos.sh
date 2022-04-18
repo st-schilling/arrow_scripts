@@ -19,6 +19,9 @@
 # load generic shared definitions
 . ./shared-definitions.sh
 
+# although no updates are retrieved from Google AOSP, all repositories are needed for later operation
+cloneUnknownToGoogle=true;
+
 # This is for manually tagging only - leave empty at any time
 manuallyTaggedRepos=()
 
@@ -48,7 +51,7 @@ cd $WORKING_DIR
 # warn_user
 
 # Get the upstream repos we track
-get_repos
+get_repos $cloneUnknownToGoogle
 
 echo "================================================"
 echo "          Force Syncing all your repos          "

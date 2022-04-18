@@ -18,6 +18,9 @@
 # load generic shared definitions
 . ./shared-definitions.sh
 
+# although no updates are retrieved from Google AOSP, all repositories are needed for later operation
+tagPushUnknownToGoogle=true;
+
 # This is the array of repos to which are tagged manually
 manuallyTaggedRepos=()
 
@@ -61,7 +64,7 @@ cd $WORKING_DIR
 # warn_user
 
 # Get the upstream repos we track
-get_repos
+get_repos $tagPushUnknownToGoogle
 
 echo "================================================"
 echo "          Force Syncing all your repos          "

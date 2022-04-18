@@ -32,6 +32,8 @@ ANDROID_BRANCH="android-security-$ANDROID_VERSION_BRANCH"
 # The tag you want to merge in goes here
 ANDROID11_BRANCH="arrow-11.0"
 
+ANDROID11_BRANCH_REFS="refs/heads/arrow-11.0"
+
 # The tag you want to merge in goes here
 FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 
@@ -79,8 +81,6 @@ blacklist=('cts' 'prebuilt' 'external/chromium-webview' 'prebuilts/build-tools' 
            'prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9' 'prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8'
            'packages/apps/WallpaperPicker' 'pdk')
 
-ARROWOS_neededAtAnyTime=('build/make')
-
 # This is the array of repos to which are tagged manually
 manuallyTaggedRepos=()
 
@@ -103,16 +103,6 @@ function is_in_blacklist() {
 
 function is_manually_tagged() {
   for j in ${manuallyTaggedRepos[@]}
-  do
-    if [ "$j" == "$1" ]; then
-      return 0;
-    fi
-  done
-  return 1;
-}
-
-function is_in_neededAtAnyTime() {
-  for j in ${ARROWOS_neededAtAnyTime[@]}
   do
     if [ "$j" == "$1" ]; then
       return 0;
@@ -156,49 +146,53 @@ function warn_user() {
 }
 
 function get_repos() {
-  cd $REPO_DIR
-  declare -a repoPaths=( $($repo_cmd list | cut -d: -f1) )
-  declare -a repoNames=( $($repo_cmd list | cut -d: -f2) )
-  curl --output /tmp/rebase.tmp $ANDROID_REPO --silent # Download the html source of the Android source page
-  # Since their projects are listed, we can grep for them
+    cd $REPO_DIR || exit 1;
+    declare -a complete_repo_info=$($repo_cmd forall -c 'echo "$REPO_PATH : $REPO_PROJECT : $REPO_RREV" | grep ": '$ANDROID11_BRANCH_REFS'"')
+    declare -a repoPaths=( $(echo "$complete_repo_info" | cut -d: -f1) )
+    declare -a repoNames=( $(echo "$complete_repo_info" | cut -d: -f2) )
+    curl --output /tmp/rebase.tmp $ANDROID_REPO --silent # Download the html source of the Android source page
+    # Since their projects are listed, we can grep for them
 
 
-arraylength=${#repoPaths[@]}
-for (( c=0; c<${arraylength}; c++ ));
-  do
-    i=${repoPaths[$c]}
-    arrowsRepoName=${repoNames[$c]}
+    arraylength=${#repoPaths[@]}
+    for (( c=0; c<${arraylength}; c++ ));
+    do
+        i=${repoPaths[$c]}
+        arrowsRepoName=${repoNames[$c]}
 
-    $(grep -q "$i" /tmp/rebase.tmp);
-    googleHasIt=$?
-    $(is_in_neededAtAnyTime "$i");
-    neededAtAnyTime=$?
+        $(grep -q "$i" /tmp/rebase.tmp);
+        googleHasIt=$?
 
-     if [[ googleHasIt -eq "0" || neededAtAnyTime -eq "0" ]]; then
-      if grep -q "$i" $ARROWOS_REPO_MANIFEST; then # If we have it in our manifest and
-        if grep "$i" $ARROWOS_REPO_MANIFEST | grep -q 'remote="arrow"'; then # If we track our own copy of it
-          if ! is_in_blacklist $i; then # If it's not in our blacklist
-            if ! is_manually_tagged $i; then # If it's not in our blacklist
-                if is_in_accepted_repos $i; then # If it's not in our blacklist
-                    echo "adding $i to repos"
-                    upstream+=("$i") # Then we need to update it
-                    arrowsRepos+=("$arrowsRepoName") # Then we need to update it
-                else
-                    echo "$i is not in accepted_repos"
-                fi
-            else
-                echo "$i is manually tagged"
-                fi
-            fi
-        else
-            echo "$i is in blacklist"
+        ignoreGoogleRepo=1;
+        if [[ "$1" == "true" ]]; then
+            ignoreGoogleRepo=0
         fi
-      fi
-    else
-        echo "$i Google hasnt it"
-    fi
-  done
-  rm /tmp/rebase.tmp
+
+        if [[ googleHasIt -eq "0" || ignoreGoogleRepo -eq "0" ]]; then # Google has it or ignoreGoogleRepo
+            if grep -q "$i" $ARROWOS_REPO_MANIFEST; then # If we have it in our manifest and
+                if grep "$i" $ARROWOS_REPO_MANIFEST | grep -q 'remote="arrow"'; then # If we track our own copy of it
+                    if ! is_in_blacklist $i; then # If it's not in our blacklist
+                        if ! is_manually_tagged $i; then # If it's not to be tagged manually
+                            if is_in_accepted_repos $i; then # If it's specifically cleared by us (or all)
+                                echo "adding $i to repos"
+                                upstream+=("$i") # Then we need to update it
+                                arrowsRepos+=("$arrowsRepoName") # Then we need to update it
+                            else
+                                echo "$i is not in accepted_repos"
+                            fi # If it's specifically cleared by us (or all)
+                        else
+                            echo "$i is manually tagged"
+                        fi # If it's not to be tagged manually
+                    else
+                        echo "$i is in blacklist"
+                    fi # If it's not in our blacklist
+                fi # If we track our own copy of it
+            fi # If we have it in our manifest and
+        else
+            echo "$i Google hasnt it"
+        fi # Google has it or ignoreGoogleRepo
+    done
+    rm /tmp/rebase.tmp
 }
 
 function switchBaseBranch() {

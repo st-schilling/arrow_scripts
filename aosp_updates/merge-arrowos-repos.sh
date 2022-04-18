@@ -19,6 +19,9 @@
 # load generic shared definitions
 . ./shared-definitions.sh
 
+# merge directly depends on Google AOSP, so repositories unknown to Google need to be ignored
+mergeUnknownToGoogle=false;
+
 # This is for manually tagging only - leave empty at any time
 manuallyTaggedRepos=()
 
@@ -46,7 +49,7 @@ cd $WORKING_DIR
 # warn_user
 
 # Get the upstream repos we track
-get_repos
+get_repos $mergeUnknownToGoogle
 
 echo "================================================"
 echo "          Force Syncing all your repos          "

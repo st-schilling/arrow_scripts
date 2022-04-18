@@ -19,6 +19,9 @@
 # load generic shared definitions
 . ./shared-definitions.sh
 
+# although no updates are retrieved from Google AOSP, all repositories are needed for later operation
+prepareUnknownToGoogle=true;
+
 # This is for manually tagging only - leave empty at any time
 manuallyTaggedRepos=()
 
@@ -55,7 +58,7 @@ cd $WORKING_DIR
 # warn_user
 
 # Get the upstream repos we track
-get_repos
+get_repos $prepareUnknownToGoogle
 
 echo "================================================"
 echo "          Force Syncing all your repos          "
@@ -69,6 +72,7 @@ echo "================================================"
 arraylength=${#upstream[@]}
 for (( i=0; i<${arraylength}; i++ ));
 do
+  echo "cd $WORKING_DIR/${upstream[$i]}"
   switchBaseBranch ${upstream[$i]}
   resetBaseBranch ${upstream[$i]}
   deleteFeatureBranch ${upstream[$i]}
