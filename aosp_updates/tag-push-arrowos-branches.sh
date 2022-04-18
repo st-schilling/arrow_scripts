@@ -44,12 +44,13 @@ Android 11.0.0 Release $ANDROID_RELEASE_VERSION"
   fi
 }
 
-function pushTag() {
+function push() {
   cd $WORKING_DIR/$1
-  
-  echo "git push $ARROWOS_REPO_WITH_USER/$2.git $ANDROID_VERSION_BRANCH";
-  
-  git push $ARROWOS_REPO_WITH_USER/$2.git $ANDROID_VERSION_BRANCH
+
+  echo "pushing $4: $3";
+  echo "git push $ARROWOS_REPO_WITH_USER/$2.git $3";
+
+  git push $ARROWOS_REPO_WITH_USER/$2.git $3
   if [ $? -ne 0 ]; then # If merge failed
     pushedF+=($1) # Add to the list
   else
@@ -92,7 +93,8 @@ if [ ${#failed[@]} -eq 0 ]; then
     arraylength=${#upstream[@]}
     for (( i=0; i<${arraylength}; i++ ));
     do
-        pushTag ${upstream[$i]} ${arrowsRepos[$i]}
+        push ${upstream[$i]} ${arrowsRepos[$i]} $FEATURE_BRANCH "branch"
+        push ${upstream[$i]} ${arrowsRepos[$i]} $ANDROID_VERSION_BRANCH "tag"
     done
 fi
 
