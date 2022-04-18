@@ -194,6 +194,8 @@ for (( c=0; c<${arraylength}; c++ ));
             echo "$i is in blacklist"
         fi
       fi
+    else
+        echo "$i Google hasnt it"
     fi
   done
   rm /tmp/rebase.tmp
