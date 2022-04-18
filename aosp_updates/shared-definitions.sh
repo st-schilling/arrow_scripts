@@ -86,7 +86,7 @@ manuallyTaggedRepos=()
 
 # This is for restricting operation to just the named repos - allowing quicker operation upon testing/error
 acceptedRepos=()
-           
+
 # Colors
 COLOR_RED='\033[0;31m'
 COLOR_BLANK='\033[0m'
@@ -122,12 +122,12 @@ function is_in_neededAtAnyTime() {
 }
 
 function is_in_accepted_repos() {
-  
+
   if [[ ${#acceptedRepos[@]} -eq 0 ]]; then
     echo "acceptedRepos unset - accepting all"
     return 0;
   fi
-  
+
   for j in ${acceptedRepos[@]}
   do
     if [ "$j" == "$1" ]; then
@@ -161,8 +161,8 @@ function get_repos() {
   declare -a repoNames=( $($repo_cmd list | cut -d: -f2) )
   curl --output /tmp/rebase.tmp $ANDROID_REPO --silent # Download the html source of the Android source page
   # Since their projects are listed, we can grep for them
-  
-  
+
+
 arraylength=${#repoPaths[@]}
 for (( c=0; c<${arraylength}; c++ ));
   do
@@ -203,26 +203,26 @@ for (( c=0; c<${arraylength}; c++ ));
 
 function switchBaseBranch() {
   cd $WORKING_DIR/$1
-  
+
   git status
-  
+
   echo "checkout BaseBranch: git checkout $ANDROID11_BRANCH"
   git checkout $ANDROID11_BRANCH
-  
+
   git status
 }
 
 function resetBaseBranch() {
   cd $WORKING_DIR/$1
-  
+
   git status
-  
+
   echo "reset BaseBranch: git reset --hard origin/$ANDROID11_BRANCH"
   git reset --hard origin/$ANDROID11_BRANCH
-  
+
   echo "reset pullChanges: git pull origin $ANDROID11_BRANCH"
   git pull origin $ANDROID11_BRANCH
-  
+
   git status
 }
 
@@ -268,6 +268,6 @@ function print_result() {
 
 
 git config --global core.askpass /usr/bin/ksshaskpass
-git config --global user.name $GIT_REPO_USER
-git config --global user.email $GIT_REPO_EMAIL
+git config --global user.name "$GIT_REPO_USER"
+git config --global user.email "$GIT_REPO_EMAIL"
 export GIT_ASKPASS=`which ksshaskpass`
