@@ -146,6 +146,24 @@ function warn_user() {
   fi
 }
 
+
+function print_branches() {
+
+    text="$1";
+  local -n targetPath=$2
+  local -n repoName=$3
+
+  echo ""
+  echo "======== $text ========"
+  echo ""
+  length=${#targetPath[@]}
+  for (( c=0; c<${length}; c++ ));
+  do
+    echo -e "${targetPath[$c]} --> ${repoName[$c]}"
+  done
+
+}
+
 function get_repos() {
     cd $REPO_DIR || exit 1;
     declare -a complete_repo_info=$($repo_cmd forall -c 'echo "$REPO_PATH : $REPO_PROJECT : $REPO_RREV" | grep ": '$ANDROID11_BRANCH_REFS'"')
@@ -218,6 +236,14 @@ function get_repos() {
         fi # Google has it or ignoreGoogleRepo
     done
     rm /tmp/rebase.tmp
+
+  print_branches "Branches unknown to $ARROWOS_REPO_MANIFEST" notInManifest notInManifestRepos
+  print_branches "Branches unknown to ArrowOS" notArrowOsTracked notArrowOsTrackedRepos
+  print_branches "Branches unknown to arrow-$ARROWOS_REPO_USER" notStSchillingTracked notStSchillingTrackedRepos
+  print_branches "Branches blacklisted" blacklisted blacklistedRepos
+  print_branches "Branches to be tagged manually" manuallyTaggedRepoNames manuallyTaggedRepoRepos
+  print_branches "Branches not Accepted" notAccepted notAcceptedRepos
+  print_branches "Branches added for operation" upstream arrowsRepos
 }
 
 function switchBaseBranch() {
@@ -245,6 +271,21 @@ function resetBaseBranch() {
   git status
 }
 
+function print_result_branch() {
+
+
+    text="$1";
+  local -n repo=$2
+
+  echo ""
+  echo "======== $text ========"
+  echo ""
+  for i in ${repo[@]}
+  do
+    echo -e "$i"
+  done
+}
+
 function print_result() {
   if [ ${#failed[@]} -eq 0 ]; then
     echo ""
@@ -260,29 +301,11 @@ function print_result() {
     echo -e $COLOR_BLANK
   fi
 
-  echo ""
-  echo "======== "$FEATURE_BRANCH" has been $1 successfully ========"
-  echo ""
-  for i in ${success[@]}
-  do
-    echo -e "$i"
-  done
+  print_result_branch "$FEATURE_BRANCH has been $1 successfully" success
 
-  echo ""
-  echo "======== tag "$ANDROID_BRANCH" has been $2 successfully to these repos ========"
-  echo ""
-  for i in ${pushedP[@]}
-  do
-    echo -e "$i"
-  done
+  print_result_branch "tag $ANDROID_BRANCH has been $2 successfully to these repos" pushedP
 
-  echo ""
-  echo "======== tag "$ANDROID_BRANCH" $2 has failed to these repos ========"
-  echo ""
-  for i in ${pushedF[@]}
-  do
-    echo -e "$i"
-  done
+  print_result_branch "tag $ANDROID_BRANCH $2 has failed to these repos" pushedF
 }
 
 
