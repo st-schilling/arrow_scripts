@@ -40,7 +40,7 @@ FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 REPO_DIR="/mnt/aosp-11"
 
 #ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml" # contains small amount only
-ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml.Android-11"
+ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml.Android-11-St-Schilling"
 
 # Google source url
 ANDROID_REPO=https://android.googlesource.com/platform
@@ -57,6 +57,7 @@ ARROWOS_REPO=https://github.com/$ARROWOS_REPO_USER
 
 # ArrowOS source url with username
 ARROWOS_REPO_WITH_USER=https://$ARROWOS_REPO_USER@$ARROWOS_REPO
+ARROWOS_REPO_WITH_USER=https://$ARROWOS_REPO_USER@github.com/$ARROWOS_REPO_USER
 
 repo_cmd="python3 /mnt/arrowos/ajinasokan/bin/repo"
 
@@ -154,6 +155,19 @@ function get_repos() {
     # Since their projects are listed, we can grep for them
 
 
+    notInManifest=()
+    notInManifestRepos=()
+    notArrowOsTracked=()
+    notArrowOsTrackedRepos=()
+    notStSchillingTracked=()
+    notStSchillingTrackedRepos=()
+    blacklisted=()
+    blacklistedRepos=()
+    manuallyTaggedRepoNames=()
+    manuallyTaggedRepoRepos=()
+    notAccepted=()
+    notAcceptedRepos=()
+
     arraylength=${#repoPaths[@]}
     for (( c=0; c<${arraylength}; c++ ));
     do
@@ -170,23 +184,34 @@ function get_repos() {
 
         if [[ googleHasIt -eq "0" || ignoreGoogleRepo -eq "0" ]]; then # Google has it or ignoreGoogleRepo
             if grep -q "$i" $ARROWOS_REPO_MANIFEST; then # If we have it in our manifest and
-                if grep "$i" $ARROWOS_REPO_MANIFEST | grep -q 'remote="arrow"'; then # If we track our own copy of it
+                if grep "$i" $ARROWOS_REPO_MANIFEST | grep -q "remote=\"arrow-$ARROWOS_REPO_USER\""; then # If we track our own copy of it
                     if ! is_in_blacklist $i; then # If it's not in our blacklist
                         if ! is_manually_tagged $i; then # If it's not to be tagged manually
                             if is_in_accepted_repos $i; then # If it's specifically cleared by us (or all)
-                                echo "adding $i to repos"
                                 upstream+=("$i") # Then we need to update it
                                 arrowsRepos+=("$arrowsRepoName") # Then we need to update it
                             else
-                                echo "$i is not in accepted_repos"
+                                notAccepted+=("$i")
+                                notAcceptedRepos+=("$arrowsRepoName")
                             fi # If it's specifically cleared by us (or all)
                         else
-                            echo "$i is manually tagged"
+                            manuallyTaggedRepoNames+=("$i")
+                            manuallyTaggedRepoRepos+=("$arrowsRepoName")
                         fi # If it's not to be tagged manually
                     else
-                        echo "$i is in blacklist"
+                        blacklisted+=("$i")
+                        blacklistedRepos+=("$arrowsRepoName")
                     fi # If it's not in our blacklist
-                fi # If we track our own copy of it
+                elif grep "$i" $ARROWOS_REPO_MANIFEST | grep -q 'remote="arrow"'; then # If ArrowOS tracks its copy of it
+                    notStSchillingTracked+=("$i")
+                    notStSchillingTrackedRepos+=("$arrowsRepoName")
+                else
+                    notArrowOsTracked+=("$i")
+                    notArrowOsTrackedRepos+=("$arrowsRepoName")
+                fi # If we or ArrowOS tracks its copy of it
+            else
+                notInManifest+=("$i")
+                notInManifestRepos+=("$arrowsRepoName")
             fi # If we have it in our manifest and
         else
             echo "$i Google hasnt it"
