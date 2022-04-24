@@ -3,7 +3,7 @@ Do it once for all repos:
 1a. mkdir /mnt/SOMETHING 
 1b. cd /mnt/SOMETHING
 1c. python3 /mnt/arrowos/ajinasokan/bin/repo init --depth=1 -u https://github.com/ArrowOS/android_manifest.git -b arrow-11.0
-1d. python3 /mnt/arrowos/ajinasokan/bin/repo sync  -f --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+1d. python3 /mnt/arrowos/ajinasokan/bin/repo sync  --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
 1. get all repos: run clone-arrowos-repos.sh
 
 Do it for each update:
