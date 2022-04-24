@@ -34,3 +34,30 @@ Change-Id: YYYY
 7. again, check, if manually edited repositories have been added to variable "manuallyTaggedRepos"
 8. create a tag and push it for each unchanged repo, allowing users to specifically load a matching version: run tag-push-arrowos-branches.sh
 
+
+
+Help on error:
+
+1. git push fails on libunwindstack/tests/files/offline/jit_debug_x86_32/libartd.so is too large
+
+=> Error message:
+remote: error: Trace: 00e860a3aaee2ee6955a2ff0831e2e35bb9084c39e389d497e128e3dcd397da2        
+remote: error: See http://git.io/iEPt8g for more information.        
+remote: error: File libunwindstack/tests/files/offline/jit_debug_x86_32/libartd.so is 219.06 MB; this exceeds GitHub's file size limit of 100.00 MB        
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.        
+error: failed to push some refs to 'https://st-schilling@github.com/st-schilling/android_system_core.git'
+To https://github.com/st-schilling/android_system_core.git
+!	refs/heads/feature/11.0.0_r53:refs/heads/feature/11.0.0_r53	[remote rejected] (pre-receive hook declined)
+Done
+
+=> Solution:
+https://karatos.com/art?id=98dd791a-4647-472e-ac8b-8febba50ae34
+
+=> Steps:
+1. file does not exist: test -e libunwindstack/tests/files/offline/jit_debug_x86_32/libartd.so
+2. verify file has been deleted from git: git log --diff-filter=D --summary -- libunwindstack/tests/files/offline/jit_debug_x86_32/libartd.so
+3. find the large file, if unknown, which causes the trouble: https://stackoverflow.com/questions/65713044/git-filter-branch-doesnt-remove-files / https://github.com/RazorFlow/framework/blob/master/git_find_big.sh
+4. rewrite commit history, removing file from history: time git filter-branch --index-filter 'git rm --ignore-unmatch libunwindstack/tests/files/offline/jit_debug_x86_32/libartd.so' --tag-name-filter 'cat' -- --all
+5. make sure that the deletion of has been carried out correctly: git for-each-ref --format="%(refname)" refs/original/| xargs -n 1 git update-ref -d
+6. Has been saved by refs/originalall references git-update-ref and delete: git reflog expire --expire=now --all
+7. Delete all of the invalid reflog entry can not be accessed: git gc --prune=now
