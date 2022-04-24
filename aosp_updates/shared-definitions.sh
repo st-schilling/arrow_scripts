@@ -16,12 +16,12 @@
 # limitations under the License.
 
 WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../ && pwd )
-WORKING_DIR=/mnt/arrowos/st-schilling
+WORKING_DIR=/mnt/arrowos/st-schilling-r54
 # Hardcode your ROM DIR if this fails example: /ssd/arrow/
 echo $WORKING_DIR
 
 # The tag you want to merge in goes here
-ANDROID_RELEASE_VERSION="53"
+ANDROID_RELEASE_VERSION="54"
 
 # The tag you want to merge in goes here
 ANDROID_VERSION_BRANCH="11.0.0_r$ANDROID_RELEASE_VERSION"
@@ -40,7 +40,7 @@ FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 REPO_DIR="/mnt/aosp-11"
 
 #ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml" # contains small amount only
-ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml.Android-11-St-Schilling"
+ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r54.xml"
 
 # Google source url
 ANDROID_REPO=https://android.googlesource.com/platform
