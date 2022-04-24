@@ -10,8 +10,26 @@ Do it for each update:
 1. set to desired feature branch: update variable "ANDROID_VERSION_BRANCH"
 2. prepare repos for merging, by creating a new feature branch from the latest Android-11 branch: run prepare-arrowos-branches.sh
 3. run the merge: run merge-arrowos-repos.sh
+
 4. manually resolve merge errors, add every manually handled repo to variable "manuallyTaggedRepos"
-5. update Android version number: android_build/core/version_defaults.mk
+=> add merged bugfixes to the commit message (see: https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-security-11.0.0_rXX, link: log )
+=> add merged release's Change-Id to the commit message (see: https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-security-11.0.0_rXX)
+=> commit each bugfix separately
+
+5. update Android version number: android_build/core/version_defaults.mk, Variable PLATFORM_SECURITY_PATCH; use Google's AOSP security information for the commit text (https://source.android.com/security/bulletin)
+6. manually create a PR for each updated repository, using:
+name: Android security 11.0.0 release XX
+text:
+Merge tag 'android-security-11.0.0_rXX' of https://android.googlesource.com/platform/frameworks/base into arrow-11.0
+
+Android security 11.0.0 release XX
+Tag: 
+
+CHANGES
+
+Change-Id: YYYY
+
+
 6. manually create a tag for the manually edited repositories and push those
 7. again, check, if manually edited repositories have been added to variable "manuallyTaggedRepos"
 8. create a tag and push it for each unchanged repo, allowing users to specifically load a matching version: run tag-push-arrowos-branches.sh
