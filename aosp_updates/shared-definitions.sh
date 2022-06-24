@@ -21,7 +21,7 @@ WORKING_DIR=/mnt/arrowos/st-schilling-r54
 echo $WORKING_DIR
 
 # The tag you want to merge in goes here
-ANDROID_RELEASE_VERSION="54"
+ANDROID_RELEASE_VERSION="56"
 
 # The tag you want to merge in goes here
 ANDROID_VERSION_BRANCH="11.0.0_r$ANDROID_RELEASE_VERSION"
@@ -40,7 +40,7 @@ FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 REPO_DIR="/mnt/aosp-11"
 
 #ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml" # contains small amount only
-ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r54.xml"
+ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r56.xml"
 
 # Google source url
 ANDROID_REPO=https://android.googlesource.com/platform
@@ -267,11 +267,11 @@ function resetBaseBranch() {
 
   git status
 
-  echo "reset BaseBranch: git reset --hard origin/$ANDROID11_BRANCH"
-  git reset --hard origin/$ANDROID11_BRANCH
+  echo "reset BaseBranch: git reset --hard st-schilling/$ANDROID11_BRANCH"
+  git reset --hard st-schilling/$ANDROID11_BRANCH
 
-  echo "reset pullChanges: git pull origin $ANDROID11_BRANCH"
-  git pull origin $ANDROID11_BRANCH
+  echo "reset pullChanges: git pull st-schilling $ANDROID11_BRANCH"
+  git pull st-schilling $ANDROID11_BRANCH
 
   git status
 }
