@@ -53,7 +53,7 @@ GIT_REPO_USER="Stefan Schilling"
 ARROWOS_REPO_USER=st-schilling
 
 # ArrowOS source url
-ARROWOS_REPO=https://github.com/$ARROWOS_REPO_USER
+ARROWOS_REPO=https://$ARROWOS_REPO_USER@github.com/$ARROWOS_REPO_USER
 
 # ArrowOS source url with username
 ARROWOS_REPO_WITH_USER=https://$ARROWOS_REPO_USER@$ARROWOS_REPO
