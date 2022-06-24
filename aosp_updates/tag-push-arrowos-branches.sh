@@ -31,11 +31,11 @@ acceptedRepos=()
 function tagBranch() {
   echo "cd $WORKING_DIR/$1"
   cd $WORKING_DIR/$1
-  
+
   commitMessage="Merge tag '$ANDROID_BRANCH' of $ARROWOS_REPO/$2 into HEAD
 
 Android 11.0.0 Release $ANDROID_RELEASE_VERSION"
-  
+
   echo "tag branch: git tag -a $ANDROID_VERSION_BRANCH -m \"$commitMessage\"";
 
   git tag -a $ANDROID_VERSION_BRANCH -m "$commitMessage"
@@ -52,7 +52,7 @@ function push() {
   echo "pushing $4: $3";
   echo "git push $ARROWOS_REPO_WITH_USER/$2.git $3";
 
-  git push $ARROWOS_REPO_WITH_USER/$2.git $3
+ git push $ARROWOS_REPO_WITH_USER/$2.git $3
   if [ $? -ne 0 ]; then # If merge failed
     pushedF+=($1) # Add to the list
   else
@@ -78,17 +78,17 @@ echo "================================================"
 
 
 # Merge every repo in upstream
-arraylength=${#upstream[@]}
-for (( i=0; i<${arraylength}; i++ ));
-do
+ arraylength=${#upstream[@]}
+ for (( i=0; i<${arraylength}; i++ ));
+ do
   echo "#########################################"
 
-  switchBaseBranch ${upstream[$i]}
-  resetBaseBranch ${upstream[$i]}
-  tagBranch ${upstream[$i]} ${arrowsRepos[$i]}
-  
-  echo "#########################################"
-done
+   switchBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
+   resetBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
+   tagBranch ${upstream[$i]} ${arrowsRepos[$i]}
+
+   echo "#########################################"
+ done
 
 if [ ${#failed[@]} -eq 0 ]; then
     arraylength=${#upstream[@]}
@@ -101,3 +101,4 @@ fi
 
 # Print any repos that failed, so we can fix merge issues
 print_result "tagged" "pushed"
+

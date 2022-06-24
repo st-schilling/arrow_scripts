@@ -30,23 +30,23 @@ acceptedRepos=()
 
 function deleteFeatureBranch() {
   cd $WORKING_DIR/$1
-  
+
   git status
-  
+
   echo "checkout FeatureBranch: git branch -D $FEATURE_BRANCH"
   git branch -D $FEATURE_BRANCH
-  
+
   git status
 }
 
 function switchFeatureBranch() {
   cd $WORKING_DIR/$1
-  
+
   git status
-  
+
   echo "checkout FeatureBranch: git checkout -b $FEATURE_BRANCH $ANDROID11_BRANCH"
   git checkout -b $FEATURE_BRANCH $ANDROID11_BRANCH
-  
+
   git status
 }
 
@@ -71,9 +71,10 @@ echo "================================================"
 arraylength=${#upstream[@]}
 for (( i=0; i<${arraylength}; i++ ));
 do
+  echo "#######################################################################"
   echo "cd $WORKING_DIR/${upstream[$i]}"
-  switchBaseBranch ${upstream[$i]}
-  resetBaseBranch ${upstream[$i]}
+  switchBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
+  resetBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
   deleteFeatureBranch ${upstream[$i]}
   switchFeatureBranch ${upstream[$i]}
 done

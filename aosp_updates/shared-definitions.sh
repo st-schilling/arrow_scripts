@@ -51,6 +51,7 @@ GIT_REPO_USER="Stefan Schilling"
 
 # ArrowOS source user
 ARROWOS_REPO_USER=st-schilling
+ARROWOS_REPO_NAME=st-schilling
 
 # ArrowOS source url
 ARROWOS_REPO=https://$ARROWOS_REPO_USER@github.com/$ARROWOS_REPO_USER
@@ -78,9 +79,11 @@ pushedP=()
 
 # This is the array of repos to blacklist and not merge
 blacklist=('cts' 'prebuilt' 'external/chromium-webview' 'prebuilts/build-tools' 'packages/apps/MusicFX' 'packages/apps/FMRadio'
-           'packages/apps/Gallery2' 'packages/apps/Updater' 'hardware/qcom/power' 'prebuilts/r8' 'prebuilts/tools' 'tools/metalava'
+           'packages/apps/Gallery2' 'packages/apps/Updater'
+           'hardware/qcom/power' 'prebuilts/r8' 'prebuilts/tools' 'tools/metalava'
            'prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9' 'prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8'
-           'packages/apps/WallpaperPicker' 'pdk')
+           'packages/apps/WallpaperPicker' 'pdk'
+           )
 
 # This is the array of repos to which are tagged manually
 manuallyTaggedRepos=()
@@ -253,25 +256,27 @@ function get_repos() {
 
 function switchBaseBranch() {
   cd $WORKING_DIR/$1
+  checkoutRepoName="$2";
 
   git status
 
-  echo "checkout BaseBranch: git checkout $ANDROID11_BRANCH"
-  git checkout $ANDROID11_BRANCH
+  echo "checkout BaseBranch: git checkout $checkoutRepoName/$ANDROID11_BRANCH"
+  git checkout $checkoutRepoName/$ANDROID11_BRANCH
 
   git status
 }
 
 function resetBaseBranch() {
   cd $WORKING_DIR/$1
+  resetPullRepoName="$2";
 
   git status
 
-  echo "reset BaseBranch: git reset --hard st-schilling/$ANDROID11_BRANCH"
-  git reset --hard st-schilling/$ANDROID11_BRANCH
+  echo "reset BaseBranch: git reset --hard $resetPullRepoName/$ANDROID11_BRANCH"
+  git reset --hard $resetPullRepoName/$ANDROID11_BRANCH
 
-  echo "reset pullChanges: git pull st-schilling $ANDROID11_BRANCH"
-  git pull st-schilling $ANDROID11_BRANCH
+  echo "reset pullChanges: git pull $resetPullRepoName $ANDROID11_BRANCH"
+  git pull $resetPullRepoName $ANDROID11_BRANCH
 
   git status
 }
