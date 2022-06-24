@@ -25,6 +25,7 @@ tagPushUnknownToGoogle=true;
 manuallyTaggedRepos=()
 
 # This is for restricting operation to just the named repos - allowing quicker operation upon testing/error
+## Note: 'packages/apps/Updater' is disabled by shared-definitions.sh/blacklist!
 acceptedRepos=()
 
 function tagBranch() {
