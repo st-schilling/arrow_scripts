@@ -167,6 +167,11 @@ function print_branches() {
 function get_repos() {
     cd $REPO_DIR || exit 1;
     declare -a complete_repo_info=$($repo_cmd forall -c 'echo "$REPO_PATH : $REPO_PROJECT : $REPO_RREV" | grep ": '$ANDROID11_BRANCH_REFS'"')
+
+
+    echo "complete_repo_info:
+    $complete_repo_info";
+
     declare -a repoPaths=( $(echo "$complete_repo_info" | cut -d: -f1) )
     declare -a repoNames=( $(echo "$complete_repo_info" | cut -d: -f2) )
     curl --output /tmp/rebase.tmp $ANDROID_REPO --silent # Download the html source of the Android source page
