@@ -40,7 +40,13 @@ FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 REPO_DIR="/mnt/aosp-11"
 
 #ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml" # contains small amount only
-ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r56.xml"
+ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r$ANDROID_RELEASE_VERSION.xml"
+
+if [ ! -f "$ARROWOS_REPO_MANIFEST" ]; then
+    echo "File $ARROWOS_REPO_MANIFEST is missing - copy latest arrow.xml from repo manifest to $ARROWOS_REPO_MANIFEST. Aborting."
+    exit 1;
+fi
+
 
 # Google source url
 ANDROID_REPO=https://android.googlesource.com/platform
