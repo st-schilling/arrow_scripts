@@ -257,6 +257,10 @@ function get_repos() {
   print_branches "Branches to be tagged manually" manuallyTaggedRepoNames manuallyTaggedRepoRepos
   print_branches "Branches not Accepted" notAccepted notAcceptedRepos
   print_branches "Branches added for operation" upstream arrowsRepos
+
+  echo "##############################################"
+  echo "If any repo is missing here and has been added to manifest lately, remember to update file $ARROWOS_REPO_MANIFEST!"
+  echo "##############################################"
 }
 
 function switchBaseBranch() {
