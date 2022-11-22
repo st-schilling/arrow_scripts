@@ -16,7 +16,7 @@
 # limitations under the License.
 
 WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../ && pwd )
-WORKING_DIR=/mnt/arrowos/st-schilling-r54
+WORKING_DIR=/mnt/arrowos/st-schilling-scripts-working-dir
 # Hardcode your ROM DIR if this fails example: /ssd/arrow/
 echo $WORKING_DIR
 
