@@ -27,6 +27,23 @@ manuallyTaggedRepos=()
 # This is for restricting operation to just the named repos - allowing quicker operation upon testing/error
 acceptedRepos=()
 
+function deleteTag() {
+  echo "cd $WORKING_DIR/$1"
+  cd $WORKING_DIR/$1
+
+  echo "Delete local tag: git tag -d $ANDROID_VERSION_BRANCH";
+  git tag -d $ANDROID_VERSION_BRANCH
+
+  echo "Delete remote tag: git push --delete $ARROWOS_REPO_NAME $ANDROID_VERSION_BRANCH";
+  git push --delete $ARROWOS_REPO_NAME $ANDROID_VERSION_BRANCH
+
+  if [ $? -ne 0 ]; then # If merge failed
+    failed+=($1) # Add to the list
+  else
+    success+=($1)
+  fi
+}
+
 function tagBranch() {
   echo "cd $WORKING_DIR/$1"
   cd $WORKING_DIR/$1
@@ -84,6 +101,7 @@ echo "================================================"
 
    switchBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
    resetBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
+   deleteTag ${upstream[$i]} ${arrowsRepos[$i]}
    tagBranch ${upstream[$i]} ${arrowsRepos[$i]}
 
    echo "#########################################"
@@ -93,8 +111,10 @@ if [ ${#failed[@]} -eq 0 ]; then
     arraylength=${#upstream[@]}
     for (( i=0; i<${arraylength}; i++ ));
     do
+      echo "#########################################"
         push ${upstream[$i]} ${arrowsRepos[$i]} $FEATURE_BRANCH "branch"
         push ${upstream[$i]} ${arrowsRepos[$i]} $ANDROID_VERSION_BRANCH "tag"
+      echo "#########################################"
     done
 fi
 
