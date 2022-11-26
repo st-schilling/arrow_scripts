@@ -16,6 +16,7 @@ python3 /mnt/arrowos/ajinasokan/bin/repo sync  -f --force-sync --no-clone-bundle
 git clone -b arrow-11.0 --single-branch https://github.com/st-schilling/android_kernel_motorola_sanders.git  -b $CHECKOUT_REFERENCE kernel/motorola/msm8953
 #git clone -b arrow-11.0 --single-branch https://github.com/ArrowOS-Devices/android_kernel_motorola_sanders.git kernel/motorola/msm8953
 git clone -b arrow-11.0 --single-branch https://github.com/ArrowOS-Devices/android_device_motorola_sanders.git device/motorola/sanders
+#git clone -b arrow-11.0 --single-branch https://github.com/st-schilling/android_device_motorola_sanders.git -b feature/fm_radio device/motorola/sanders
 git clone -b arrow-11.0 --single-branch https://github.com/ArrowOS-Devices/android_vendor_motorola_sanders.git vendor/motorola/sanders
 cp ../arrowos/arrows-11.0-sanders-ota-definition.json.source .
 mkdir -p vendor/arrow/security/sanders
