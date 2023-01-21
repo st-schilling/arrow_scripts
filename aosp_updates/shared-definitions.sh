@@ -17,6 +17,7 @@
 
 WORKING_DIR=$( cd $( dirname $( readlink -f "${BASH_SOURCE[0]}" ) )/../ && pwd )
 WORKING_DIR=/mnt/arrowos/st-schilling-scripts-working-dir
+WORKING_DIR=/mnt/arrowos/st-schilling-src
 # Hardcode your ROM DIR if this fails example: /ssd/arrow/
 echo $WORKING_DIR
 
