@@ -8,7 +8,7 @@ echo "sudo systemctl stop sav-rms.service"
 echo "#####################################################"
 echo "#####################################################"
 
-export CHECKOUT_REFERENCE="refs/tags/11.0.0_r61"
+export CHECKOUT_REFERENCE="refs/tags/11.0.0_r63"
 #export CHECKOUT_REFERENCE="feature/11.0.0_r61-update-build"
 
 python3 /mnt/arrowos/ajinasokan/bin/repo init --depth=1 -u https://st-schilling@github.com/st-schilling/android_manifest.git -b $CHECKOUT_REFERENCE
