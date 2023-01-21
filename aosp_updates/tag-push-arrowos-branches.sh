@@ -68,7 +68,7 @@ function push() {
   echo "pushing $4: $3";
   echo "git push $ARROWOS_REPO_WITH_USER/$2.git $3";
 
- git push $ARROWOS_REPO_WITH_USER/$2.git $3
+  git push $ARROWOS_REPO_WITH_USER/$2.git $3
   if [ $? -ne 0 ]; then # If merge failed
     pushedF+=($1) # Add to the list
   else
