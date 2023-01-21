@@ -112,7 +112,7 @@ if [ ${#failed[@]} -eq 0 ]; then
     for (( i=0; i<${arraylength}; i++ ));
     do
       echo "#########################################"
-        push ${upstream[$i]} ${arrowsRepos[$i]} $FEATURE_BRANCH "branch"
+##        push ${upstream[$i]} ${arrowsRepos[$i]} $FEATURE_BRANCH "branch"
         push ${upstream[$i]} ${arrowsRepos[$i]} $ANDROID_VERSION_BRANCH "tag"
       echo "#########################################"
     done
