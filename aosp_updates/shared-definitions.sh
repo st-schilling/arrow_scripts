@@ -22,7 +22,7 @@ WORKING_DIR=/mnt/arrowos/st-schilling-src
 echo $WORKING_DIR
 
 # The tag you want to merge in goes here
-ANDROID_RELEASE_VERSION="63"
+ANDROID_RELEASE_VERSION="64"
 
 # The tag you want to merge in goes here
 ANDROID_VERSION_BRANCH="11.0.0_r$ANDROID_RELEASE_VERSION"
