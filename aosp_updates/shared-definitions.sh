@@ -187,7 +187,6 @@ function get_repos() {
     curl --output /tmp/rebase.tmp $ANDROID_REPO --silent # Download the html source of the Android source page
     # Since their projects are listed, we can grep for them
 
-
     notInManifest=()
     notInManifestRepos=()
     notArrowOsTracked=()
@@ -262,6 +261,7 @@ function get_repos() {
 
   echo "##############################################"
   echo "If any repo is missing here and has been added to manifest lately, remember to update file $ARROWOS_REPO_MANIFEST!"
+  echo "and $REPO_DIR probably needs to be updated."
   echo "##############################################"
 }
 

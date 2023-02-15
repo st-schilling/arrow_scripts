@@ -94,26 +94,32 @@ echo "================================================"
 
 
 # Merge every repo in upstream
- arraylength=${#upstream[@]}
- for (( i=0; i<${arraylength}; i++ ));
- do
+arraylength=${#upstream[@]}
+for (( i=0; i<${arraylength}; i++ ));
+do
   echo "#########################################"
+  echo "Starting preparation: Repo ${arrowsRepos[$i]} in $WORKING_DIR/${upstream[$i]}:"
 
    switchBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
    resetBaseBranch ${upstream[$i]} ${ARROWOS_REPO_NAME}
    deleteTag ${upstream[$i]} ${arrowsRepos[$i]}
    tagBranch ${upstream[$i]} ${arrowsRepos[$i]}
 
-   echo "#########################################"
- done
+  echo "Finished preparation: Repo ${arrowsRepos[$i]} in $WORKING_DIR/${upstream[$i]}:"
+  echo "#########################################"
+done
 
 if [ ${#failed[@]} -eq 0 ]; then
     arraylength=${#upstream[@]}
     for (( i=0; i<${arraylength}; i++ ));
     do
       echo "#########################################"
+      echo "Starting push: Repo ${arrowsRepos[$i]} in $WORKING_DIR/${upstream[$i]}:"
+
 ##        push ${upstream[$i]} ${arrowsRepos[$i]} $FEATURE_BRANCH "branch"
         push ${upstream[$i]} ${arrowsRepos[$i]} $ANDROID_VERSION_BRANCH "tag"
+
+      echo "Finished preparation: Repo ${arrowsRepos[$i]} in $WORKING_DIR/${upstream[$i]}:"
       echo "#########################################"
     done
 fi
