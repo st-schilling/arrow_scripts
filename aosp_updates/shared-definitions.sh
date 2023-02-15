@@ -33,7 +33,8 @@ ANDROID_BRANCH="android-security-$ANDROID_VERSION_BRANCH"
 # The tag you want to merge in goes here
 ANDROID11_BRANCH="arrow-11.0"
 
-ANDROID11_BRANCH_REFS="refs/heads/arrow-11.0"
+ARROWOS_REPO_SEARCH_PATTERN="refs/heads/arrow-11.0"
+ARROWOS_REPO_SEARCH_PATTERN="android_"
 
 # The tag you want to merge in goes here
 FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
@@ -175,10 +176,10 @@ function print_branches() {
 
 function get_repos() {
     cd $REPO_DIR || exit 1;
-    declare -a complete_repo_info=$($repo_cmd forall -c 'echo "$REPO_PATH : $REPO_PROJECT : $REPO_RREV" | grep ": '$ANDROID11_BRANCH_REFS'"')
+    declare -a complete_repo_info=$($repo_cmd forall -c 'echo "$REPO_PATH : $REPO_PROJECT : $REPO_RREV" | grep ": '$ARROWOS_REPO_SEARCH_PATTERN'"')
 
 
-    echo "complete_repo_info:
+    echo "complete_repo_info - w/ search pattern '$ARROWOS_REPO_SEARCH_PATTERN' applied:
     $complete_repo_info";
 
     declare -a repoPaths=( $(echo "$complete_repo_info" | cut -d: -f1) )
