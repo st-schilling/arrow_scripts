@@ -127,3 +127,6 @@ fi
 # Print any repos that failed, so we can fix merge issues
 print_result "tagged" "pushed"
 
+
+echo "Remember to manually tag the kernel, since it is not picked up by this script!";
+
