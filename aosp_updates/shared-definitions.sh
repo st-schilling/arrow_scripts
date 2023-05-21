@@ -22,7 +22,7 @@ WORKING_DIR=/mnt/arrowos/st-schilling-src
 echo $WORKING_DIR
 
 # The tag you want to merge in goes here
-ANDROID_RELEASE_VERSION="64"
+ANDROID_RELEASE_VERSION="67"
 
 # The tag you want to merge in goes here
 ANDROID_VERSION_BRANCH="11.0.0_r$ANDROID_RELEASE_VERSION"
@@ -39,7 +39,8 @@ ARROWOS_REPO_SEARCH_PATTERN="android_"
 # The tag you want to merge in goes here
 FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 
-REPO_DIR="/mnt/aosp-11"
+#REPO_DIR="/mnt/aosp-11"
+REPO_DIR="/mnt/aosp-11.r64"
 
 #ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml" # contains small amount only
 ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r$ANDROID_RELEASE_VERSION.xml"
