@@ -128,5 +128,23 @@ fi
 print_result "tagged" "pushed"
 
 
-echo "Remember to manually tag the kernel, since it is not picked up by this script!";
+echo "Remember to manually tag the kernel and manifest, since they are not picked up by this script!";
+
+echo "#########################################";
+echo "Manifest:"
+manifestBranch="https://st-schilling@github.com/st-schilling/android_manifest.git";
+manifestCommitMessage="Merge tag '$ANDROID_BRANCH' of $manifestBranch into HEAD
+
+Android 11.0.0 Release $ANDROID_RELEASE_VERSION"
+echo "tag manifest: git tag -a $ANDROID_VERSION_BRANCH -m \"$manifestCommitMessage\"";
+echo "push tag manifest: git push $manifestBranch 11.0.0_r$ANDROID_RELEASE_VERSION";
+
+echo "#########################################";
+echo "Manifest:"
+kernelBranch="https://st-schilling@github.com/st-schilling/android_manifest.git";
+kernelCommitMessage="Merge tag '$ANDROID_BRANCH' of $kernelBranch into HEAD
+
+Android 11.0.0 Release $ANDROID_RELEASE_VERSION"
+echo "tag manifest: git tag -a $ANDROID_VERSION_BRANCH -m \"$kernelCommitMessage\"";
+echo "push tag manifest: git push $kernelBranch 11.0.0_r$ANDROID_RELEASE_VERSION";
 
