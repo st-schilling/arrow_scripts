@@ -41,6 +41,7 @@ FEATURE_BRANCH="feature/$ANDROID_VERSION_BRANCH"
 
 #REPO_DIR="/mnt/aosp-11"
 REPO_DIR="/mnt/aosp-11.r64"
+REPO_DIR="/mnt/arrowos/st-schilling-scripts-working-dir"
 
 #ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow.xml" # contains small amount only
 ARROWOS_REPO_MANIFEST="/mnt/arrowos/arrow-Android-11.r$ANDROID_RELEASE_VERSION.xml"
