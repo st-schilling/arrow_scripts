@@ -1,13 +1,5 @@
 #!/bin/sh
 
-echo "#####################################################"
-echo "#####################################################"
-echo "Disable Virus scanner!!!!"
-echo "sudo systemctl stop sav-protect.service"
-echo "sudo systemctl stop sav-rms.service"
-echo "#####################################################"
-echo "#####################################################"
-
 export CHECKOUT_REFERENCE="refs/tags/11.0.0_r63"
 #export CHECKOUT_REFERENCE="feature/11.0.0_r61-update-build"
 

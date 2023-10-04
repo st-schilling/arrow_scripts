@@ -1,13 +1,5 @@
 #!/bin/sh
 
-echo "#####################################################"
-echo "#####################################################"
-echo "Disable Virus scanner!!!!"
-echo "sudo systemctl stop sav-protect.service"
-echo "sudo systemctl stop sav-rms.service"
-echo "#####################################################"
-echo "#####################################################"
-
 export VERSION="11.0.0_r67"
 export VERSION_BUILD="${VERSION}_build"
 #export CHECKOUT_REFERENCE="refs/tags/$VERSION"
