@@ -9,6 +9,9 @@ lunch arrow_sanders-userdebug
 
 df -h
 
+## needs to be recorded before starting build, would be too late otherwise
+fileTimestampUtcMidnight=$(date -u --date="$(date -u +%Y-%m-%d)" +%s)
+
 ## setting limits
 #ulimit -a
 #getconf ARG_MAX
@@ -65,7 +68,6 @@ targetFileName="Arrow-v11.0-sanders-UNOFFICIAL-OTA-REPLACE_ME-VANILLA.zip"
 otaDefinitionFile="arrows-11.0-sanders-ota-definition.json";
 otaDefinitionFileSource="${otaDefinitionFile}.source";
 
-fileTimestampUtcMidnight=$(date -u --date="$(date -u +%Y-%m-%d)" +%s)
 fileInfoUnsigned=$(ls -l --time-style="+%s" ${filePathUnsignedZip})
 fileSizeUnsigned=$(echo "$fileInfoUnsigned" | tr -s ' ' | cut -d ' ' -f5)
 fileDateTimeUtcUnsigned=$(ls -l ${filePathUnsignedZip} --time-style="+%Y-%m-%d_%H:%M:%S" | tr -s ' ' | cut -d ' ' -f6)
