@@ -1,4 +1,9 @@
 #/bin/sh
+
+#### zum Start: ./build.sh > build.log-2024-04-16-08-10 2>&1
+
+
+
 #export TARGET_PREBUILT_KERNEL="/mnt/aosp-11.r54/kernel/prebuilts/4.19-msm8953-Image.gz"
 export ARROW_GAPPS=false
 source build/envsetup.sh
