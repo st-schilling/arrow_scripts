@@ -14,3 +14,10 @@ cp ../arrowos/arrows-11.0-sanders-ota-definition.json.source .
 mkdir -p vendor/arrow/security/sanders
 cp ~/.android-certs/unprotected/* vendor/arrow/security/sanders/
 cp ../arrowos/build.sh .
+
+
+echo "#####################################################"
+echo "#####################################################"
+echo "Remember to fsck the disk !!!!"
+echo "#####################################################"
+echo "#####################################################"
